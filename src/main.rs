@@ -9,17 +9,17 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
 
   let mut delay = Delay;
   let mut mpu = Mpu6050::new(i2c);
-
+  //create buffer with len 100
+  let mut buffer = CircularBuffer::<100,u32>::new();
   mpu.init(&mut delay)?;
 
   loop {
+
+
+
     // get roll and pitch estimate
     let acc = mpu.get_acc_angles()?;
     println!("r/p: {:?}", acc);
-
-    // get temp
-    let temp = mpu.get_temp()?;
-    println!("temp: {:?}c", temp);
 
     // get gyro data, scaled with sensitivity 
     let gyro = mpu.get_gyro()?;
@@ -28,5 +28,12 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
     // get accelerometer data, scaled with sensitivity
     let acc = mpu.get_acc()?;
     println!("acc: {:?}", acc);
+
+    //Do some unholy maths to get a general 
+    //apply a kalman filter to moderate noise
+    //Do a current accerlation check
+    // add the current value to the buffer
+    buffer.push_back(current_acceleration);
+
   }
 }
