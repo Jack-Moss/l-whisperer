@@ -16,36 +16,28 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
 
   let mut delay = Delay;
   let mut mpu = Mpu6050::new(i2c);
-  const inital_datapoint = Data_point{
-    accel: 0,
-    gyro:0,
-    magnetic:0,
-  }
   //create buffer with len 100
-  let mut buffer: CircularBuffer<100, Data_point> = CircularBuffer::<100,inital_datapoint>::new();
+  let mut buffer: CircularBuffer<100, Data_point> = CircularBuffer::<100,Data_point>::new();
   mpu.init(&mut delay)?;
 
   loop {
-
-
+    let datapoint = Data_point{
+      magnetic: mpu.get_acc_angles(),
+      gyro:mpu.get_gyro(),
+      accel:mpu.get_acc(),
+    };
+    buffer.push_back(datapoint);
 
     // get roll and pitch estimate? is there a yaw here too?
 
-    let acc = mpu.get_acc_angles()?;
-    println!("r/p: {:?}", ang);
-    // get gyro data, scaled with sensitivity 
-    let gyro = mpu.get_gyro()?;
-    println!("gyro: {:?}", gyro);
-    // get accelerometer data, scaled with sensitivity
-    let acc = mpu.get_acc()?;
-    println!("acc: {:?}", acc);
-    let map: ???
-    buffer.push_back({acc ,gyro, ang});
-    //Do some unholy maths to get a general 
-    //apply a kalman filter to moderate noise
-    //Do a current accerlation check
-    // add the current value to the buffer
-    buffer.push_back(current_acceleration);
+    // let acc = mpu.get_acc_angles()?;
+    // println!("r/p: {:?}", ang);
+    // // get gyro data, scaled with sensitivity 
+    // let gyro = mpu.get_gyro()?;
+    // println!("gyro: {:?}", gyro);
+    // // get accelerometer data, scaled with sensitivity
+    // let acc = mpu.get_acc()?;
+    // println!("acc: {:?}", acc);
 
   }
 }
