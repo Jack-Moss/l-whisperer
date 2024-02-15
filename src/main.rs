@@ -3,7 +3,7 @@ use linux_embedded_hal::{I2cdev, Delay};
 use i2cdev::linux::LinuxI2CError;
 use circular_buffer::CircularBuffer;
 
-struct Data_point{
+struct DataPoint{
   accel: u32,
   gyro: u32,
   magnetic: u32,
@@ -17,27 +17,35 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
   let mut delay = Delay;
   let mut mpu = Mpu6050::new(i2c);
   //create buffer with len 100
-  let mut buffer: CircularBuffer<100, Data_point> = CircularBuffer::<100,Data_point>::new();
+  let mut buffer: CircularBuffer<100, DataPoint> = CircularBuffer::<100,DataPoint>::new();
   mpu.init(&mut delay)?;
 
   loop {
-    let datapoint = Data_point{
+
+
+
+
+    let datapoint = DataPoint{
       magnetic: mpu.get_acc_angles(),
       gyro:mpu.get_gyro(),
       accel:mpu.get_acc(),
     };
+
     buffer.push_back(datapoint);
 
-    // get roll and pitch estimate? is there a yaw here too?
+
+
 
     // let acc = mpu.get_acc_angles()?;
     // println!("r/p: {:?}", ang);
-    // // get gyro data, scaled with sensitivity 
     // let gyro = mpu.get_gyro()?;
     // println!("gyro: {:?}", gyro);
-    // // get accelerometer data, scaled with sensitivity
     // let acc = mpu.get_acc()?;
     // println!("acc: {:?}", acc);
 
   }
+}
+
+fn dump_data(circular_buffer: CircularBuffer) -> Result<T,E>{
+
 }
