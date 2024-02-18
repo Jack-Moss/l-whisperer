@@ -13,6 +13,3 @@ mpu6050 = "0.1.6"
 
 [dev-dependencies]
 criterion = "0.5.1"
-[[bench]]
-name = "my_benchmark"
-harness = false
