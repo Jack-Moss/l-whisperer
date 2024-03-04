@@ -2,11 +2,11 @@ use mpu6050::*;
 use linux_embedded_hal::{I2cdev, Delay};
 use i2cdev::linux::LinuxI2CError;
 use circular_buffer::CircularBuffer;
-
+use std::collections::VecDeque
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
 
 
-}
+
 struct DataPoint{
   accel: f32,
   gyro: f32,
@@ -21,9 +21,6 @@ impl DataPoint{
 }
 
 
-struct StackDump{
-  stack: DataPoint,
-}
 
 // I think I need a custom implementation of the circular buffer that allows me to store arrays rather than singular numbers as I want
 // {acc,gyro,mag} readings at each point
@@ -36,6 +33,7 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
   //create buffer with len 100
   let mut buffer: CircularBuffer<100, DataPoint> = CircularBuffer::<100,DataPoint>::new();
   let mut dump_stack;
+  let deque: VecDeque<DataPoint> = VecDeque::with_capacity(300);
   mpu.init(&mut delay)?;
 
   let dataloop = loop {
