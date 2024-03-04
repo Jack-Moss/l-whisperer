@@ -6,10 +6,11 @@ use circular_buffer::CircularBuffer;
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
 
 
+}
 struct DataPoint{
-  accel: u32,
-  gyro: u32,
-  magnetic: u32,
+  accel: f32,
+  gyro: f32,
+  magnetic: f32,
 }
 
 impl DataPoint{
@@ -37,19 +38,18 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
   let mut dump_stack;
   mpu.init(&mut delay)?;
 
-  loop {
+  let dataloop = loop {
 
 
 
-
+    // loop of adding items to the circular buffer
     let datapoint = DataPoint{
       magnetic: mpu.get_acc_angles(),
       gyro:mpu.get_gyro(),
       accel:mpu.get_acc(),
     };
-    // some timer required somehow?
-    //gonn be hard to get a good ms reading without it. hopefully the benchmarking will help when I figure out how to use it.
     buffer.push_back(datapoint);
+
 
 
 
@@ -61,6 +61,6 @@ fn main() -> Result<(), Mpu6050Error<LinuxI2CError>> {
     // let acc = mpu.get_acc()?;
     // println!("acc: {:?}", acc);
 
-  }
+  };
 }
 
