@@ -2,7 +2,11 @@ use circular_buffer::CircularBuffer;
 use ::mycrate::i2c_config;
 use std::collections::VecDeque;
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
-
+struct DataPoint{
+  accel: f32,
+  gyro: f32,
+  magnetic: f32,
+}
 
 
 
@@ -10,12 +14,12 @@ use std::collections::VecDeque;
 // {acc,gyro,mag} readings at each point
 fn main() {
   //create buffer with len 100
-  let mut buffer: CircularBuffer<100, T> = CircularBuffer::<100,T>::new();
-  let mut dump_stack;
-  let deque: VecDeque<T> = VecDeque::with_capacity(300);
+  let mut buffer: CircularBuffer<100, DataPoint> = CircularBuffer::<100,DataPoint>::new();
+  let dump_stack: Vec<DataPoint> = Vec::with_capacity(1000);
+  let deque: VecDeque<DataPoint> = VecDeque::with_capacity(300);
 
-  let dataloop = loop {
-
+  let dataloop = loop {mut
+    mut
 
 
     // loop of adding items to the circular buffer
