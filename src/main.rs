@@ -14,7 +14,7 @@ struct DataPoint{
 fn main() {
   //create buffer with len 100
   //start to fill buffer
-  let mut data_buffer= CircularBuffer::<3000, DataPoint>::new();
+  let mut data_buffer =  CircularBuffer::<3000, DataPoint>::new();
 
   
 
@@ -43,4 +43,12 @@ fn test_sim_build(){
   assert_eq!(data_entry.accel, Direction(1,2,3));
   assert_eq!(data_entry.gyro, Direction(1,2,3));
   assert_eq!(data_entry.magnetic, Direction(1,2,3));
+}
+#[test]
+fn test_populate_circular_buffer(){
+  let mut circle_buffer = CircularBuffer::<10, DataPoint>::new();
+  while circle_buffer.len() < 10 {
+    circle_buffer.push_back(simulate_read())
+  }
+  assert_eq!(circle_buffer.len(), 10);
 }
