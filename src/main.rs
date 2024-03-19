@@ -5,12 +5,16 @@ use linux_embedded_hal::{I2cdev, Delay};
 use i2cdev::linux::LinuxI2CError;
 
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
-struct DataPoint{
-  accel: f32,
-  gyro: f32,
-  magnetic: f32,
-}
 
+struct Direction(i32,i32,i32);
+struct DataPoint{
+  accel: Direction,
+  gyro: Direction,
+  magnetic: Direction,
+}
+struct datastructure{
+  font_buffer: CircularBuffer<3000, DataPoint>
+}
 // I think I need a custom implementation of the circular buffer that allows me to store arrays rather than singular numbers as I want
 // {acc,gyro,mag} readings at each point
 fn main() {
@@ -21,7 +25,7 @@ fn main() {
 
 }
 
-fn create_buffer()->
+
 
 fn calculate_kn(climber_weight: i32, max_speed: i32) ->i32 {
   climber_weight * max_speed
