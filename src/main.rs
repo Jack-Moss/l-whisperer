@@ -43,6 +43,8 @@ fn test_sim_build(){
   assert_eq!(data_entry.accel, Direction(1,2,3));
   assert_eq!(data_entry.gyro, Direction(1,2,3));
   assert_eq!(data_entry.magnetic, Direction(1,2,3));
+  assert_eq!(circle_buffer[0])
+
 }
 #[test]
 fn test_populate_circular_buffer(){
