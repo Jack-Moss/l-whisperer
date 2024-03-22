@@ -33,6 +33,9 @@ fn calculate_kn(climber_weight: i32, max_speed: i32) ->i32 {
   climber_weight * max_speed
 }
 
+// fn chech_for_accel(data_point:DataPoint, )
+// fn chech_for_accel(data_point:DataPoint, )
+
 #[test]
 fn test_calculate_kilonewtons(){
     assert_eq!(calculate_kn(2,3), 6);
@@ -43,14 +46,14 @@ fn test_sim_build(){
   assert_eq!(data_entry.accel, Direction(1,2,3));
   assert_eq!(data_entry.gyro, Direction(1,2,3));
   assert_eq!(data_entry.magnetic, Direction(1,2,3));
-  assert_eq!(circle_buffer[0])
+  // assert_eq!(circle_buffer[0])
 
 }
 #[test]
 fn test_populate_circular_buffer(){
-  let mut circle_buffer = CircularBuffer::<10, DataPoint>::new();
-  while circle_buffer.len() < 10 {
+  let mut circle_buffer = CircularBuffer::<3000, DataPoint>::new();
+  while circle_buffer.len() < 3000 {
     circle_buffer.push_back(simulate_read())
   }
-  assert_eq!(circle_buffer.len(), 10);
+  assert_eq!(circle_buffer.len(), 3000);
 }
