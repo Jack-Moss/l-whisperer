@@ -59,9 +59,6 @@ fn calculate_kn(climber_weight: i32, max_speed: i32) ->i32 {
   climber_weight * max_speed
 }
 
-// fn chech_for_accel(data_point:DataPoint, )
-// fn chech_for_accel(data_point:DataPoint, )
-
 #[test]
 fn test_calculate_kilonewtons(){
     assert_eq!(calculate_kn(2,3), 6);
