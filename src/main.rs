@@ -14,7 +14,7 @@ struct DataPoint{
 fn main() {
   //create buffer with len 100
   //start to fill buffer
-  let mut data_buffer =  CircularBuffer::<3000, DataPoint>::new();
+  let _data_buffer =  CircularBuffer::<3000, DataPoint>::new();
 
   
 
