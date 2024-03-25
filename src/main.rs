@@ -14,9 +14,18 @@ struct DataPoint{
 fn main() {
   //create buffer with len 100
   //start to fill buffer
-  let _data_buffer =  CircularBuffer::<3000, DataPoint>::new();
+  let mut data_buffer =  CircularBuffer::<3000, DataPoint>::new();
+  let mut last_five: circular_buffer = CircularBuffer::<5, DataPoint>::new();
+  // i should try to split this into two threads, and have one stop the other on
+  // a detection?
+  while data_buffer.len() < 3000 {
+    data_buffer.push_back(simulate_read());
+    last_five.push_back(simulate_read());
+    check_acceleration(last_five)
+  }
+}
 
-  
+fn check_acceleration(last_five:CircularBuffer){
 
 }
 
