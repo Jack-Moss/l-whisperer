@@ -15,17 +15,34 @@ fn main() {
   //create buffer with len 100
   //start to fill buffer
   let mut data_buffer =  CircularBuffer::<3000, DataPoint>::new();
-  let mut last_five: circular_buffer = CircularBuffer::<5, DataPoint>::new();
   // i should try to split this into two threads, and have one stop the other on
   // a detection?
   while data_buffer.len() < 3000 {
     data_buffer.push_back(simulate_read());
+
+    let mut last_five = CircularBuffer::<5, DataPoint>::new();
     last_five.push_back(simulate_read());
     check_acceleration(last_five)
   }
 }
 
-fn check_acceleration(last_five:CircularBuffer){
+fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
+  let acceleration: i32;
+  let boundary: i32;
+  let g: f32 = 9.80665;
+  for datapoint in last_five {
+    //acceleration
+    let x:i32 =     datapoint.accel[0];
+    let y:i32 =     datapoint.accel[1];
+    let z:i32 =     datapoint.accel[2];
+
+    let x:i32 =     datapoint.gyro[0];
+    let y:i32 =     datapoint.gyro[1];
+    let z:i32 =     datapoint.gyro[2];
+
+
+    
+  }
 
 }
 
