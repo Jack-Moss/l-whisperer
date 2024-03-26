@@ -30,22 +30,29 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
   let acceleration: i32;
   let boundary: i32;
   let g: f32 = 9.80665;
+  //need to implement some kind of timer
   for datapoint in last_five {
     //acceleration
-    let x:i32 =     datapoint.accel[0];
-    let y:i32 =     datapoint.accel[1];
-    let z:i32 =     datapoint.accel[2];
+    let accel_x:i32 =     datapoint.accel.0;
+    let accel_y:i32 =     datapoint.accel.1;
+    let accel_z:i32 =     datapoint.accel.2;
 
-    let x:i32 =     datapoint.gyro[0];
-    let y:i32 =     datapoint.gyro[1];
-    let z:i32 =     datapoint.gyro[2];
+    let gyro_x:i32 =     datapoint.gyro.0;
+    let gyro_y:i32 =     datapoint.gyro.1;
+    let gyro_z:i32 =     datapoint.gyro.2;
 
+    let mag_x:i32 =     datapoint.magnetic.0;
+    let mag_y:i32 =     datapoint.magnetic.1;
+    let mag_z:i32 =     datapoint.magnetic.2;
 
     
   }
 
 }
 
+fn create_random_floats()->f32 { 
+    rand::random::<f32>()
+}
 
 fn simulate_read() -> DataPoint {
   let accel = Direction(1,2,3);
@@ -54,6 +61,9 @@ fn simulate_read() -> DataPoint {
   DataPoint{ accel: accel, gyro: gyro, magnetic: mag }
 }
 
+fn real_read(){
+  todo!();
+}
 
 fn calculate_kn(climber_weight: i32, max_speed: i32) ->i32 {
   climber_weight * max_speed
