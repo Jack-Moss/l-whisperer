@@ -1,7 +1,7 @@
 use circular_buffer::CircularBuffer;
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
 #[derive(PartialEq, Debug)]
-struct Direction(i32,i32,i32);
+struct Direction(f32,f32,f32);
 struct DataPoint{
   accel: Direction,
   gyro: Direction,
@@ -27,23 +27,23 @@ fn main() {
 }
 
 fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
-  let acceleration: i32;
-  let boundary: i32;
+  let acceleration: f32;
+  let boundary: f32;
   let g: f32 = 9.80665;
   //need to implement some kind of timer
   for datapoint in last_five {
     //acceleration
-    let accel_x:i32 =     datapoint.accel.0;
-    let accel_y:i32 =     datapoint.accel.1;
-    let accel_z:i32 =     datapoint.accel.2;
+    let accel_x:f32 =     datapoint.accel.0;
+    let accel_y:f32 =     datapoint.accel.1;
+    let accel_z:f32 =     datapoint.accel.2;
 
-    let gyro_x:i32 =     datapoint.gyro.0;
-    let gyro_y:i32 =     datapoint.gyro.1;
-    let gyro_z:i32 =     datapoint.gyro.2;
+    let gyro_x:f32 =     datapoint.gyro.0;
+    let gyro_y:f32 =     datapoint.gyro.1;
+    let gyro_z:f32 =     datapoint.gyro.2;
 
-    let mag_x:i32 =     datapoint.magnetic.0;
-    let mag_y:i32 =     datapoint.magnetic.1;
-    let mag_z:i32 =     datapoint.magnetic.2;
+    let mag_x:f32 =     datapoint.magnetic.0;
+    let mag_y:f32 =     datapoint.magnetic.1;
+    let mag_z:f32 =     datapoint.magnetic.2;
 
     
   }
@@ -68,13 +68,13 @@ fn real_read(){
   todo!();
 }
 
-fn calculate_kn(climber_weight: i32, max_speed: i32) ->i32 {
+fn calculate_kn(climber_weight: f32, max_speed: f32) ->f32 {
   climber_weight * max_speed
 }
 
 #[test]
 fn test_calculate_kilonewtons(){
-    assert_eq!(calculate_kn(2,3), 6);
+    assert_eq!(calculate_kn(2.0,3.0), 6.0);
 }
 #[test]
 fn test_populate_circular_buffer(){
