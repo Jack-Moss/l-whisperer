@@ -50,14 +50,17 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
 
 }
 
-fn create_random_floats()->f32 { 
-    rand::random::<f32>()
+fn create_randomised_direction()->Direction { 
+  Direction(    rand::random::<f32>()
+,    rand::random::<f32>()
+,    rand::random::<f32>()
+)
 }
 
 fn simulate_read() -> DataPoint {
-  let accel = Direction(1,2,3);
-  let gyro = Direction(1,2,3);
-  let mag = Direction(1,2,3);
+  let accel = create_randomised_direction();
+  let gyro = create_randomised_direction();
+  let mag = create_randomised_direction();
   DataPoint{ accel: accel, gyro: gyro, magnetic: mag }
 }
 
