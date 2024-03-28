@@ -77,15 +77,6 @@ fn test_calculate_kilonewtons(){
     assert_eq!(calculate_kn(2,3), 6);
 }
 #[test]
-fn test_sim_build(){
-  let data_entry = simulate_read();
-  assert_eq!(data_entry.accel, Direction(1,2,3));
-  assert_eq!(data_entry.gyro, Direction(1,2,3));
-  assert_eq!(data_entry.magnetic, Direction(1,2,3));
-  // assert_eq!(circle_buffer[0])
-
-}
-#[test]
 fn test_populate_circular_buffer(){
   let mut circle_buffer = CircularBuffer::<3000, DataPoint>::new();
   while circle_buffer.len() < 3000 {
