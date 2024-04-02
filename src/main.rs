@@ -1,4 +1,5 @@
 use circular_buffer::CircularBuffer;
+use std::f32::consts;
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
 #[derive(PartialEq, Debug)]
 struct Direction(f32,f32,f32);
@@ -41,9 +42,14 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
     let gyro_y:f32 =     datapoint.gyro.1;
     let gyro_z:f32 =     datapoint.gyro.2;
 
-    let mag_x:f32 =     datapoint.magnetic.0;
-    let mag_y:f32 =     datapoint.magnetic.1;
-    let mag_z:f32 =     datapoint.magnetic.2;
+    if consts::SQRT_2(accel_x ** 2.0 + accel_y ** 2.0 + accel_z ** 2.0) <=1 {
+    }
+
+    //total_acceleration = math.sqrt(self.Accel[0] ** 2 + self.Accel[1] ** 2 + self.Accel[2] ** 2)
+
+    // let mag_x:f32 =     datapoint.magnetic.0;
+    // let mag_y:f32 =     datapoint.magnetic.1;
+    // let mag_z:f32 =     datapoint.magnetic.2;
 
     
   }
