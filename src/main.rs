@@ -1,8 +1,10 @@
 use circular_buffer::CircularBuffer;
-use std::{f32::consts, intrinsics::sqrtf32};
+use std::f32;
+
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 struct Direction(f32,f32,f32);
+#[derive(Clone)]
 struct DataPoint{
   accel: Direction,
   gyro: Direction,
@@ -23,11 +25,11 @@ fn main() {
 
     let mut last_five = CircularBuffer::<5, DataPoint>::new();
     last_five.push_back(simulate_read());
-    check_acceleration(last_five)
+    //check_acceleration(last_five)
   }
 }
 
-fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
+fn check_acceleration(last_five:CircularBuffer<5,DataPoint>) -> bool{
   let acceleration: f32;
   let boundary: f32;
   let g: f32 = 9.80665;
@@ -43,9 +45,12 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
     let gyro_z:f32 =     datapoint.gyro.2;
 
     //This is only the looking or zero g function, which is probably not what we are after.
-    
-    if SQRT_2(accel_x ** 2.0 + accel_y ** 2.0 + accel_z ** 2.0) >= 1 {
+    let accel = (accel_x.powf(2.0)+ accel_y.powf(2.0) + accel_z.powf(2.0)).sqrt();
+    if accel  <= 1.0 {
+      println!("registered accelleration is {}",accel);
+      return true
     }
+
 
     //total_acceleration = math.sqrt(self.Accel[0] ** 2 + self.Accel[1] ** 2 + self.Accel[2] ** 2)
 
@@ -55,13 +60,13 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>){
 
     
   }
+  false
 
 }
-
 fn create_randomised_direction()->Direction { 
-  Direction(    rand::random::<f32>()
-,    rand::random::<f32>()
-,    rand::random::<f32>()
+  Direction(rand::random::<f32>(),
+            rand::random::<f32>(),
+            rand::random::<f32>(),
 )
 }
 
@@ -72,9 +77,9 @@ fn simulate_read() -> DataPoint {
   DataPoint{ accel: accel, gyro: gyro, magnetic: mag }
 }
 
-fn real_read(){
-  todo!();
-}
+// fn real_read(){
+//   todo!();
+// }
 
 fn calculate_kn(climber_weight: f32, max_speed: f32) ->f32 {
   climber_weight * max_speed
@@ -91,4 +96,17 @@ fn test_populate_circular_buffer(){
     circle_buffer.push_back(simulate_read())
   }
   assert_eq!(circle_buffer.len(), 3000);
+}
+#[test]
+fn test_simulate_detection(){
+  let accel = Direction(0.0, 0.0,0.0,);
+  let simulate_hit = DataPoint{accel:accel.clone(), gyro:accel.clone(), magnetic:accel.clone(),}; 
+
+  let mut last_five = CircularBuffer::<5,DataPoint>::new();
+  while last_five.len() <= 4 {
+    last_five.push_back(simulate_read())
+  }
+  last_five.push_back(simulate_hit);
+  check_acceleration(last_five);
+  
 }
