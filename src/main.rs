@@ -20,18 +20,28 @@ fn main() {
   let mut data_buffer =  CircularBuffer::<3000, DataPoint>::new();
   // i should try to split this into two threads, and have one stop the other on
   // a detection?
+  let mut detected = false;
   while data_buffer.len() < 3000 {
     data_buffer.push_back(simulate_read());
 
     let mut last_five = CircularBuffer::<5, DataPoint>::new();
     last_five.push_back(simulate_read());
-    //check_acceleration(last_five)
+    detected = check_acceleration(last_five)
+
   }
+  while !detected {
+    data_buffer.push_back(simulate_read());
+    let mut last_five = CircularBuffer::<5, DataPoint>::new();
+    last_five.push_back(simulate_read());
+    detected = check_acceleration(last_five)
+
+  }
+  //commence dump of data here
 }
 
 fn check_acceleration(last_five:CircularBuffer<5,DataPoint>) -> bool{
-  let acceleration: f32;
-  let boundary: f32;
+  // let acceleration: f32;
+  // let boundary: f32;
   let g: f32 = 9.80665;
   //need to implement some kind of timer
   for datapoint in last_five {
@@ -46,7 +56,7 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>) -> bool{
 
     //This is only the looking or zero g function, which is probably not what we are after.
     let accel = (accel_x.powf(2.0)+ accel_y.powf(2.0) + accel_z.powf(2.0)).sqrt();
-    if accel  <= 1.0 {
+    if accel  <= g {
       println!("registered accelleration is {}",accel);
       return true
     }
@@ -108,5 +118,4 @@ fn test_simulate_detection(){
   }
   last_five.push_back(simulate_hit);
   check_acceleration(last_five);
-  
 }
