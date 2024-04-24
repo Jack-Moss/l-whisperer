@@ -4,11 +4,10 @@ use std::f32;
 // is it possible to simulate an i2c connection for this project? would be a lot easier to develop if so.
 #[derive(PartialEq, Debug, Clone)]
 struct Direction(f32,f32,f32);
-#[derive(Clone)]
 struct DataPoint{
   accel: Direction,
-  gyro: Direction,
-  magnetic: Direction,
+  // gyro: Direction,
+  // magnetic: Direction,
 }
 
 
@@ -44,22 +43,30 @@ fn check_acceleration(last_five:CircularBuffer<5,DataPoint>) -> bool{
   // let boundary: f32;
   let g: f32 = 9.80665;
   //need to implement some kind of timer
+
+  let mut accel_x:f32 = 0.0;
+  let mut accel_y:f32 = 0.0;
+  let mut accel_z:f32 = 0.0;
   for datapoint in last_five {
     //acceleration
-    let accel_x:f32 =     datapoint.accel.0;
-    let accel_y:f32 =     datapoint.accel.1;
-    let accel_z:f32 =     datapoint.accel.2;
+    accel_x =  accel_x +   datapoint.accel.0;
+    accel_y =  accel_y +   datapoint.accel.1;
+    accel_z =  accel_z +   datapoint.accel.2;
 
-    let gyro_x:f32 =     datapoint.gyro.0;
-    let gyro_y:f32 =     datapoint.gyro.1;
-    let gyro_z:f32 =     datapoint.gyro.2;
+    // let gyro_x:f32 =     datapoint.gyro.0;
+    // let gyro_y:f32 =     datapoint.gyro.1;
+    // let gyro_z:f32 =     datapoint.gyro.2;
 
-    //This is only the looking or zero g function, which is probably not what we are after.
+    }
+    //Get the average of the five and stick that in to get an average for that chunk
+    accel_x =  accel_x / 5.0;
+    accel_y =  accel_y / 5.0;
+    accel_z =  accel_z / 5.0;
+
     let accel = (accel_x.powf(2.0)+ accel_y.powf(2.0) + accel_z.powf(2.0)).sqrt();
     if accel  <= g {
       println!("registered accelleration is {}",accel);
       return true
-    }
 
 
     //total_acceleration = math.sqrt(self.Accel[0] ** 2 + self.Accel[1] ** 2 + self.Accel[2] ** 2)
@@ -82,23 +89,23 @@ fn create_randomised_direction()->Direction {
 
 fn simulate_read() -> DataPoint {
   let accel = create_randomised_direction();
-  let gyro = create_randomised_direction();
-  let mag = create_randomised_direction();
-  DataPoint{ accel: accel, gyro: gyro, magnetic: mag }
+  // let gyro = create_randomised_direction();
+  // let mag = create_randomised_direction();
+  DataPoint{ accel: accel }
 }
 
 // fn real_read(){
 //   todo!();
 // }
 
-fn calculate_kn(climber_weight: f32, max_speed: f32) ->f32 {
-  climber_weight * max_speed
-}
+// fn calculate_kn(climber_weight: f32, max_speed: f32) ->f32 {
+//   climber_weight * max_speed
+// }
 
-#[test]
-fn test_calculate_kilonewtons(){
-    assert_eq!(calculate_kn(2.0,3.0), 6.0);
-}
+// #[test]
+// fn test_calculate_kilonewtons(){
+//     assert_eq!(calculate_kn(2.0,3.0), 6.0);
+// }
 #[test]
 fn test_populate_circular_buffer(){
   let mut circle_buffer = CircularBuffer::<3000, DataPoint>::new();
@@ -110,7 +117,7 @@ fn test_populate_circular_buffer(){
 #[test]
 fn test_simulate_detection(){
   let accel = Direction(0.0, 0.0,0.0,);
-  let simulate_hit = DataPoint{accel:accel.clone(), gyro:accel.clone(), magnetic:accel.clone(),}; 
+  let simulate_hit = DataPoint{accel:accel.clone()}; 
 
   let mut last_five = CircularBuffer::<5,DataPoint>::new();
   while last_five.len() <= 4 {
